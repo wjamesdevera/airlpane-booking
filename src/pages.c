@@ -1,5 +1,6 @@
 #include "../include/colors.h"
 #include "../include/pages.h"
+#include "../include/flight.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -7,6 +8,7 @@
 void main_menu_page()
 {
     load_employee_data();
+    load_user_data();
     bool page_on = true;
     char choice;
     print_main_menu();
@@ -21,7 +23,8 @@ void main_menu_page()
                 print_main_menu();
                 break;
             case '2':
-                print_green("USER\n");
+                user_login_page();
+                print_main_menu();
                 break;
             case '3':
                 page_on = false;
@@ -31,6 +34,8 @@ void main_menu_page()
                 break;
         }
     }
+    store_employee_data();
+    store_user_records();
 }
 
 void print_main_menu()
@@ -100,6 +105,8 @@ void employee_dashboard()
                 page_on = false;
                 break;
             case '8':
+                store_employee_data();
+                store_user_records();
                 exit(0);
             default:
                 print_red("Invalid Input\n");
@@ -140,6 +147,7 @@ void create_user_page()
     }
 
     create_user(username, password);
+    store_user_records();
     print_green("Account Creation Successful\n");
     return;
 }
@@ -181,4 +189,71 @@ void view_account_by_status()
             printf(RESET);
         }
     }
+}
+
+void user_login_page()
+{
+    char choice;
+    char username[STR_MAX_LENGTH];
+    char password[STR_MAX_LENGTH];
+    system("cls");
+    print_cyan("== Customer Login == \n");
+    printf("Username: ");
+    fflush(stdin);
+    scanf("%s", username);
+    printf("Password: ");
+    fflush(stdin);
+    scanf("%s", password);
+    if (!authenticate_user(username, password))
+    {
+        system("cls");
+        print_red("ACCESS DENIED\n");
+        return;
+    }
+    system("cls");
+    print_green("ACCESS GRANTED\n");
+    flight_booking_page();
+    return;
+}
+
+void flight_booking_page()
+{
+    char choice; 
+    flight user_flight;
+    char full_name[STR_MAX_LENGTH];
+    print_cyan("=== Flight Booking ===\n");
+    printf("Choose the number of your flight destination\n");
+    printf("1 - Caticlan\n");
+    printf("2 - Boracay\n");
+    printf("3 - Aklan\n");
+    printf("4 - Exit\n");
+    printf("Enter Choice: ");
+    fflush(stdin);
+    scanf("%c", &choice);
+    switch (choice)
+    {
+        case '1':
+            book_flight("Caticlan");
+            break;
+        case '2':
+            book_flight("Boracay");
+            break;
+        case '3':
+            book_flight("Aklan");
+            break;
+        case '4':
+            return;
+        default:
+            print_red("Invalid Input\n");
+    }
+}
+
+void book_flight(char dest[])
+{
+    char full_name[STR_MAX_LENGTH];
+    printf("Full name: ");
+    fflush(stdin);
+    scanf("%s",full_name);
+    generate_flight_ticket(full_name, dest);
+    print_green("Booking Successful\n");
 }

@@ -16,4 +16,8 @@ void create_user_page();
 void view_all_accounts();
 void view_account_by_status();
 
+void user_login_page();
+void flight_booking_page();
+void book_flight(char dest[]);
+
 #endif

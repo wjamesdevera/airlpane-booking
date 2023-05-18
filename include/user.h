@@ -3,12 +3,16 @@
 
 #define STR_LENGTH 128
 #define MAX_USER 100
-#define CUSTOMER_DATA_PATH "./accounts/user_records.txt"
+#define BUFFER_SIZE 1024
+#define USER_DATA_PATH "./accounts/user_records.txt"
 
 #include <stdbool.h>
 
 void create_user(char username[], char password[]);
 bool find_user(char username[]);
+void store_user_records();
+void load_user_data();
+bool authenticate_user(char username[], char password[]);
 
 typedef struct 
 {
